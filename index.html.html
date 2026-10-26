@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>QA Practice Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef2f6;--card:#fff;--ink:#14213d;--mute:#52607a;--line:#cfd8e3;--brand:#2b50e6;--on-brand:#fff;--hi:#ffd23f;--ok:#0d7a4a;--okbg:#dff5e9;--err:#b3261e;--errbg:#fde7e5;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1626;--card:#18223a;--ink:#e8edf7;--mute:#9aa8c4;--line:#2d3b5c;--brand:#7d98ff;--on-brand:#0f1626;--ok:#5fd9a0;--okbg:#12362a;--err:#ff8f86;--errbg:#3d1c1a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1626;--card:#18223a;--ink:#e8edf7;--mute:#9aa8c4;--line:#2d3b5c;--brand:#7d98ff;--on-brand:#0f1626;--ok:#5fd9a0;--okbg:#12362a;--err:#ff8f86;--errbg:#3d1c1a;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 "IBM Plex Sans",system-ui,sans-serif}
+h1,h2,h3{font-family:"Bricolage Grotesque","IBM Plex Sans",sans-serif;line-height:1.1;margin:0}
+a{color:var(--brand)}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.wrap{max-width:880px;margin:0 auto;padding:28px 20px 64px}
+header.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:36px}
+.logo{font:800 20px "Bricolage Grotesque",sans-serif;text-decoration:none;color:var(--ink)}
+.logo span{background:var(--hi);color:#14213d;padding:0 6px;border-radius:4px}
+.hero h1{font-size:clamp(34px,7vw,60px);font-weight:800;max-width:14ch}
+.hero p{max-width:56ch;color:var(--mute);font-size:18px;margin:16px 0 0}
+.level{margin-top:44px}
+.level h2{font-size:26px;display:flex;align-items:baseline;gap:12px}
+.level h2 small{font:500 14px "IBM Plex Sans",sans-serif;color:var(--mute)}
+.list{margin-top:14px;border-top:2px solid var(--ink)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 4px;border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink)}
+.row b{font-weight:600}.row span.d{display:block;color:var(--mute);font-size:14px}
+.tag{font-size:13px;font-weight:600;padding:3px 10px;border-radius:99px;white-space:nowrap}
+.tag.live{background:var(--hi);color:#14213d}.tag.soon{border:1px solid var(--line);color:var(--mute)}
+a.row:hover{background:var(--card)}
+.row.off{opacity:.75}
+.lab{display:grid;gap:24px;grid-template-columns:minmax(0,1fr)}
+@media(min-width:800px){.lab{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:24px}
+.panel h2{font-size:24px;margin-bottom:6px}
+.sub{color:var(--mute);margin:0 0 18px;font-size:15px}
+label{display:block;font-weight:600;margin:14px 0 6px;font-size:15px}
+.inp{display:flex;gap:8px}
+input[type=text],input[type=password],input[type=email]{width:100%;padding:11px 12px;font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:6px}
+input.bad{border-color:var(--err)}
+button{font:600 16px "IBM Plex Sans",sans-serif;cursor:pointer;border-radius:6px;padding:11px 18px;border:1.5px solid var(--brand)}
+button.primary{background:var(--brand);color:var(--on-brand);width:100%;margin-top:20px}
+button.ghost{background:transparent;color:var(--brand);white-space:nowrap}
+.err{color:var(--err);font-size:14px;margin:6px 0 0;min-height:0}
+.alert{margin-top:16px;padding:12px 14px;border-radius:6px;font-weight:500}
+.alert.error{background:var(--errbg);color:var(--err)}.alert.success{background:var(--okbg);color:var(--ok)}
+.chk{display:flex;align-items:center;gap:8px;margin-top:14px;font-weight:400}
+.chk input{width:18px;height:18px}
+.hidden{display:none!important}
+details{border-bottom:1px solid var(--line);padding:10px 0}
+summary{cursor:pointer;font-weight:600}
+details p{margin:8px 0 0;color:var(--mute);font-size:15px}
+code{background:var(--bg);padding:1px 6px;border-radius:4px;font-size:14px;word-break:break-all}
+.hint{background:var(--bg);border-left:4px solid var(--hi);padding:10px 12px;border-radius:4px;font-size:14px;margin-top:14px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:6px 4px;border-bottom:1px solid var(--line);vertical-align:top}
+.scroll{overflow-x:auto}
+footer{margin-top:56px;color:var(--mute);font-size:14px}
+@media(prefers-reduced-motion:no-preference){.hero h1{animation:in .5s ease-out both}@keyframes in{from{opacity:0;transform:translateY(8px)}}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <a class="logo" href="#home">QA Practice <span>Lab</span></a>
+  <button class="ghost" id="themeBtn" type="button" aria-label="Toggle dark mode">Theme</button>
+</header>
+
+<main id="home">
+  <section class="hero">
+    <h1>Practice test automation on real pages.</h1>
+    <p>Free scenarios for Selenium, Playwright and Cypress. Every element has a stable locator, and every page lists the test cases worth writing.</p>
+  </section>
+  <section class="level" aria-labelledby="b">
+    <h2 id="b">Beginner <small>9 scenarios, adding one at a time</small></h2>
+    <div class="list" id="list"></div>
+  </section>
+  <section class="level">
+    <h2>Intermediate <small>coming later</small></h2>
+    <div class="list"><div class="row off"><div><b>Dynamic elements, waits, iframes, file upload</b></div><span class="tag soon">Planned</span></div></div>
+  </section>
+  <section class="level">
+    <h2>Advanced <small>coming later</small></h2>
+    <div class="list"><div class="row off"><div><b>API testing, flaky elements, bug-hunt mode</b></div><span class="tag soon">Planned</span></div></div>
+  </section>
+</main>
+
+<main id="login" class="hidden">
+  <p><a href="#home">Back to all scenarios</a></p>
+  <div class="lab">
+    <section class="panel" aria-labelledby="lt">
+      <h2 id="lt">Sign in</h2>
+      <p class="sub">The page under test. Try to break it.</p>
+      <form id="loginForm" novalidate data-testid="login-form">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="off" data-testid="email-input">
+        <p class="err" id="emailErr" data-testid="email-error" role="alert"></p>
+        <label for="password">Password</label>
+        <div class="inp">
+          <input id="password" name="password" type="password" autocomplete="off" data-testid="password-input">
+          <button type="button" class="ghost" id="toggle" data-testid="toggle-password" aria-pressed="false">Show</button>
+        </div>
+        <p class="err" id="passErr" data-testid="password-error" role="alert"></p>
+        <label class="chk" for="remember"><input id="remember" type="checkbox" data-testid="remember-me"> Remember me</label>
+        <button class="primary" id="loginBtn" type="submit" data-testid="login-button">Sign in</button>
+        <div id="msg" class="alert hidden" role="status" data-testid="login-message"></div>
+      </form>
+      <div id="welcome" class="hidden" data-testid="welcome-panel">
+        <div class="alert success" id="welcomeMsg"></div>
+        <button class="primary" id="logout" type="button" data-testid="logout-button">Log out</button>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="tt">
+      <h2 id="tt">Scenario 1: Login form</h2>
+      <p class="sub">Level: Beginner</p>
+      <p style="margin:0 0 6px"><b>Valid credentials</b></p>
+      <p style="margin:0">Email: <code>tester@qalab.dev</code><br>Password: <code>Test@1234</code></p>
+      <div class="hint">Skills practiced: locators (id, name, data-testid), typing, clicking, asserting text, checking element visibility and attributes.</div>
+      <h3 style="font-size:18px;margin:22px 0 4px">Test cases to write</h3>
+      <details><summary>Valid login</summary><p>Enter valid email and password, click Sign in. Expect the welcome panel and a Log out button.</p></details>
+      <details><summary>Wrong password</summary><p>Valid email, wrong password. Expect the message “Invalid email or password.” and no welcome panel.</p></details>
+      <details><summary>Unknown email</summary><p>Use <code>nobody@example.com</code>. Same generic error message as a wrong password.</p></details>
+      <details><summary>Empty fields</summary><p>Click Sign in with both fields empty. Expect “Email is required.” and “Password is required.”</p></details>
+      <details><summary>Email format</summary><p>Enter <code>testerqalab.dev</code>. Expect “Enter a valid email address.”</p></details>
+      <details><summary>Show / hide password</summary><p>Type a password, click Show. The input type changes from <code>password</code> to <code>text</code>, and the button text becomes Hide.</p></details>
+      <details><summary>Whitespace around email</summary><p>Enter a valid email with spaces before and after. Expect login to succeed (input is trimmed).</p></details>
+      <details><summary>Case sensitivity</summary><p>Email is not case sensitive. Password is case sensitive.</p></details>
+      <details><summary>Remember me</summary><p>Check the box, log in, then log out. The email field should come back pre-filled. Uncheck it and the field stays empty.</p></details>
+      <details><summary>Logout</summary><p>After logging in, click Log out. The form returns, and the password field is empty.</p></details>
+    </section>
+  </div>
+</main>
+
+<footer>Free to use. Built for QA learners. Scenario 1 of 9 is live.</footer>
+</div>
+
+<script>
+var SCENARIOS=[
+ ["login","Login form","Valid and invalid credentials, empty fields, show/hide password",true],
+ ["","Registration form","Required fields, email format, password rules, duplicate email",false],
+ ["","Checkboxes and radio buttons","Select, deselect, default states",false],
+ ["","Dropdowns","Single, multi-select and dependent dropdowns",false],
+ ["","Buttons and links","Click, double-click, right-click, broken links",false],
+ ["","Text inputs","Special characters, max length, trimming spaces",false],
+ ["","Alerts and popups","Accept, dismiss, prompt input",false],
+ ["","Static tables","Read rows, count rows, verify cell values",false],
+ ["","Page navigation","Back and forward, new tab, page title and URL",false]
+];
+var list=document.getElementById("list");
+SCENARIOS.forEach(function(s,i){
+  var el=document.createElement(s[3]?"a":"div");
+  el.className="row"+(s[3]?"":" off");
+  if(s[3])el.href="#"+s[0];
+  el.setAttribute("data-testid","scenario-"+(i+1));
+  el.innerHTML="<div><b>"+(i+1)+". "+s[1]+"</b><span class='d'>"+s[2]+"</span></div><span class='tag "+(s[3]?"live":"soon")+"'>"+(s[3]?"Live":"Coming soon")+"</span>";
+  list.appendChild(el);
+});
+
+function route(){
+  var h=(location.hash||"#home").slice(1);
+  if(h!=="login")h="home";
+  document.getElementById("home").classList.toggle("hidden",h!=="home");
+  document.getElementById("login").classList.toggle("hidden",h!=="login");
+  document.title=(h==="login"?"Login form | ":"")+"QA Practice Lab";
+  if(h==="login")prefill();
+  window.scrollTo(0,0);
+}
+window.addEventListener("hashchange",route);
+
+var f=document.getElementById("loginForm"),em=document.getElementById("email"),pw=document.getElementById("password"),
+ emErr=document.getElementById("emailErr"),pwErr=document.getElementById("passErr"),msg=document.getElementById("msg"),
+ rem=document.getElementById("remember"),saved="";
+function prefill(){if(saved&&!em.value)em.value=saved}
+function showMsg(t,k){msg.textContent=t;msg.className="alert "+k}
+f.addEventListener("submit",function(e){
+  e.preventDefault();
+  emErr.textContent="";pwErr.textContent="";msg.className="alert hidden";
+  em.classList.remove("bad");pw.classList.remove("bad");
+  var email=em.value.trim(),pass=pw.value,ok=true;
+  if(!email){emErr.textContent="Email is required.";ok=false}
+  else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){emErr.textContent="Enter a valid email address.";ok=false}
+  if(!pass){pwErr.textContent="Password is required.";ok=false}
+  if(!ok){if(emErr.textContent)em.classList.add("bad");if(pwErr.textContent)pw.classList.add("bad");return}
+  if(email.toLowerCase()==="tester@qalab.dev"&&pass==="Test@1234"){
+    saved=rem.checked?email:"";
+    f.classList.add("hidden");
+    document.getElementById("welcome").classList.remove("hidden");
+    document.getElementById("welcomeMsg").textContent="Welcome back, tester! You are logged in.";
+  }else showMsg("Invalid email or password.","error");
+});
+document.getElementById("toggle").addEventListener("click",function(){
+  var show=pw.type==="password";
+  pw.type=show?"text":"password";
+  this.textContent=show?"Hide":"Show";
+  this.setAttribute("aria-pressed",show);
+});
+document.getElementById("logout").addEventListener("click",function(){
+  document.getElementById("welcome").classList.add("hidden");
+  f.classList.remove("hidden");
+  f.reset();em.value=saved;pw.type="password";
+  document.getElementById("toggle").textContent="Show";
+  msg.className="alert hidden";emErr.textContent="";pwErr.textContent="";
+});
+document.getElementById("themeBtn").addEventListener("click",function(){
+  var r=document.documentElement,dark=r.getAttribute("data-theme")==="dark"||(!r.getAttribute("data-theme")&&matchMedia("(prefers-color-scheme:dark)").matches);
+  r.setAttribute("data-theme",dark?"light":"dark");
+});
+route();
+</script>
+</body>
+</html>
