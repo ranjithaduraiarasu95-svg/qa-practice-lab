@@ -50,6 +50,7 @@ button.ghost{background:transparent;color:var(--brand);white-space:nowrap}
 .alert.error{background:var(--errbg);color:var(--err)}.alert.success{background:var(--okbg);color:var(--ok)}
 .chk{display:flex;align-items:center;gap:8px;margin-top:14px;font-weight:400}
 .chk input{width:18px;height:18px}
+.rules{list-style:none;padding:0;margin:10px 0 0;font-size:14px;color:var(--mute)}.rules li::before{content:"○ "}.rules li.met{color:var(--ok)}.rules li.met::before{content:"✓ "}
 .hidden{display:none!important}
 details{border-bottom:1px solid var(--line);padding:10px 0}
 summary{cursor:pointer;font-weight:600}
@@ -136,13 +137,64 @@ footer{margin-top:56px;color:var(--mute);font-size:14px}
   </div>
 </main>
 
-<footer>Free to use. Built for QA learners. Free to use. Built for QA learners. © 2026 Ranjitha Duraiarasu. Scenario 1 of 9 is live..</footer>
+<main id="register" class="hidden">
+  <p><a href="#home">Back to all scenarios</a></p>
+  <div class="lab">
+    <section class="panel" aria-labelledby="rt">
+      <h2 id="rt">Create account</h2>
+      <p class="sub">The page under test. Try to break it.</p>
+      <form id="regForm" novalidate data-testid="register-form">
+        <label for="rname">Full name</label>
+        <input id="rname" name="name" type="text" autocomplete="off" data-testid="name-input">
+        <p class="err" id="rnameErr" data-testid="name-error" role="alert"></p>
+        <label for="remail">Email</label>
+        <input id="remail" name="email" type="email" autocomplete="off" data-testid="reg-email-input">
+        <p class="err" id="remailErr" data-testid="reg-email-error" role="alert"></p>
+        <label for="rpass">Password</label>
+        <input id="rpass" name="password" type="password" autocomplete="off" data-testid="reg-password-input">
+        <ul class="rules" data-testid="password-rules">
+          <li id="rule-len">8 to 20 characters</li><li id="rule-up">One uppercase letter</li><li id="rule-low">One lowercase letter</li><li id="rule-num">One number</li><li id="rule-sp">One special character (!@#$%^&amp;*)</li>
+        </ul>
+        <p class="err" id="rpassErr" data-testid="reg-password-error" role="alert"></p>
+        <label for="rconf">Confirm password</label>
+        <input id="rconf" name="confirm" type="password" autocomplete="off" data-testid="confirm-password-input">
+        <p class="err" id="rconfErr" data-testid="confirm-password-error" role="alert"></p>
+        <label class="chk" for="rterms"><input id="rterms" type="checkbox" data-testid="terms-checkbox"> I accept the terms and conditions</label>
+        <p class="err" id="rtermsErr" data-testid="terms-error" role="alert"></p>
+        <button class="primary" id="regBtn" type="submit" data-testid="register-button">Create account</button>
+      </form>
+      <div id="regDone" class="hidden" data-testid="register-success">
+        <div class="alert success" id="regDoneMsg"></div>
+        <button class="primary" id="regAgain" type="button" data-testid="register-again">Register another user</button>
+      </div>
+    </section>
+    <section class="panel" aria-labelledby="rtt">
+      <h2 id="rtt">Scenario 2: Registration form</h2>
+      <p class="sub">Level: Beginner</p>
+      <p style="margin:0">Already registered emails: <code>tester@qalab.dev</code>, <code>admin@qalab.dev</code>, <code>taken@qalab.dev</code></p>
+      <div class="hint">Skills practiced: form filling, inline error assertions, checkbox handling, boundary values, negative testing, dynamic text checks.</div>
+      <h3 style="font-size:18px;margin:22px 0 4px">Test cases to write</h3>
+      <details><summary>Valid registration</summary><p>Fill every field correctly, accept the terms, submit. Expect “Account created successfully. Welcome, &lt;name&gt;!”</p></details>
+      <details><summary>All fields empty</summary><p>Click Create account. Expect a required error under every field and under the terms checkbox.</p></details>
+      <details><summary>Name rules</summary><p>Try 1 character, 51 characters, digits (<code>John123</code>) and symbols. Valid: <code>Mary-Ann O’Neil</code>. Spaces around the name are trimmed.</p></details>
+      <details><summary>Email format</summary><p>Try <code>abc</code>, <code>abc@</code>, <code>abc@x</code>, and <code>a b@x.com</code>. Expect “Enter a valid email address.”</p></details>
+      <details><summary>Duplicate email</summary><p>Use a registered email, also in UPPERCASE. Expect “This email is already registered.”</p></details>
+      <details><summary>Password rules</summary><p>Test each rule alone: too short, too long (21), no uppercase, no lowercase, no number, no special character. The rule list turns green as each rule is met.</p></details>
+      <details><summary>Password boundaries</summary><p>Exactly 8 characters and exactly 20 characters should pass. 7 and 21 should fail.</p></details>
+      <details><summary>Confirm password</summary><p>Different value gives “Passwords do not match.” Same value passes.</p></details>
+      <details><summary>Terms checkbox</summary><p>Everything valid but terms unchecked. Expect “You must accept the terms.”</p></details>
+      <details><summary>Register another user</summary><p>After success, click Register another user. The form comes back fully empty.</p></details>
+    </section>
+  </div>
+</main>
+
+<footer>Free to use. Built for QA learners. Scenarios 1 and 2 of 9 are live.</footer>
 </div>
 
 <script>
 var SCENARIOS=[
  ["login","Login form","Valid and invalid credentials, empty fields, show/hide password",true],
- ["","Registration form","Required fields, email format, password rules, duplicate email",false],
+ ["register","Registration form","Required fields, email format, password rules, duplicate email",true],
  ["","Checkboxes and radio buttons","Select, deselect, default states",false],
  ["","Dropdowns","Single, multi-select and dependent dropdowns",false],
  ["","Buttons and links","Click, double-click, right-click, broken links",false],
@@ -163,10 +215,11 @@ SCENARIOS.forEach(function(s,i){
 
 function route(){
   var h=(location.hash||"#home").slice(1);
-  if(h!=="login")h="home";
+  if(h!=="login"&&h!=="register")h="home";
   document.getElementById("home").classList.toggle("hidden",h!=="home");
   document.getElementById("login").classList.toggle("hidden",h!=="login");
-  document.title=(h==="login"?"Login form | ":"")+"QA Practice Lab";
+  document.getElementById("register").classList.toggle("hidden",h!=="register");
+  document.title=(h==="login"?"Login form | ":h==="register"?"Registration form | ":"")+"QA Practice Lab";
   if(h==="login")prefill();
   window.scrollTo(0,0);
 }
@@ -205,6 +258,39 @@ document.getElementById("logout").addEventListener("click",function(){
   f.reset();em.value=saved;pw.type="password";
   document.getElementById("toggle").textContent="Show";
   msg.className="alert hidden";emErr.textContent="";pwErr.textContent="";
+});
+var TAKEN=["tester@qalab.dev","admin@qalab.dev","taken@qalab.dev"];
+function g(id){return document.getElementById(id)}
+function setErr(id,t){g(id+"Err").textContent=t;g(id).classList.toggle("bad",!!t)}
+function pwRules(p){return{len:p.length>=8&&p.length<=20,up:/[A-Z]/.test(p),low:/[a-z]/.test(p),num:/[0-9]/.test(p),sp:/[!@#$%^&*]/.test(p)}}
+function showRules(p){var r=pwRules(p);for(var k in r)g("rule-"+k).className=r[k]?"met":""}
+g("rpass").addEventListener("input",function(){showRules(this.value)});
+g("regForm").addEventListener("submit",function(e){
+  e.preventDefault();
+  var n=g("rname").value.trim(),m=g("remail").value.trim(),p=g("rpass").value,c=g("rconf").value;
+  var en="",ee="",ep="",ec="",et="",r=pwRules(p);
+  if(!n)en="Full name is required.";
+  else if(n.length<2||n.length>50)en="Name must be 2 to 50 characters.";
+  else if(!/^[A-Za-z][A-Za-z '’\-]*$/.test(n))en="Name can contain letters, spaces, hyphens and apostrophes only.";
+  if(!m)ee="Email is required.";
+  else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m))ee="Enter a valid email address.";
+  else if(TAKEN.indexOf(m.toLowerCase())>-1)ee="This email is already registered.";
+  if(!p)ep="Password is required.";
+  else if(!(r.len&&r.up&&r.low&&r.num&&r.sp))ep="Password does not meet all the rules.";
+  if(!c)ec="Confirm your password.";
+  else if(c!==p)ec="Passwords do not match.";
+  if(!g("rterms").checked)et="You must accept the terms.";
+  setErr("rname",en);setErr("remail",ee);setErr("rpass",ep);setErr("rconf",ec);setErr("rterms",et);
+  if(en||ee||ep||ec||et)return;
+  g("regForm").classList.add("hidden");
+  g("regDone").classList.remove("hidden");
+  g("regDoneMsg").textContent="Account created successfully. Welcome, "+n+"!";
+});
+g("regAgain").addEventListener("click",function(){
+  g("regDone").classList.add("hidden");
+  g("regForm").classList.remove("hidden");
+  g("regForm").reset();showRules("");
+  ["rname","remail","rpass","rconf","rterms"].forEach(function(i){setErr(i,"")});
 });
 document.getElementById("themeBtn").addEventListener("click",function(){
   var r=document.documentElement,dark=r.getAttribute("data-theme")==="dark"||(!r.getAttribute("data-theme")&&matchMedia("(prefers-color-scheme:dark)").matches);
