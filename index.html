@@ -51,6 +51,8 @@ button.ghost{background:transparent;color:var(--brand);white-space:nowrap}
 .chk{display:flex;align-items:center;gap:8px;margin-top:14px;font-weight:400}
 .chk input{width:18px;height:18px}
 .rules{list-style:none;padding:0;margin:10px 0 0;font-size:14px;color:var(--mute)}.rules li::before{content:"○ "}.rules li.met{color:var(--ok)}.rules li.met::before{content:"✓ "}
+fieldset{border:1px solid var(--line);border-radius:8px;margin:16px 0 0;padding:4px 14px 14px}legend{font-weight:600;padding:0 6px}.count{color:var(--mute);font-size:14px;margin:10px 0 0}
+.btns{display:flex;gap:10px;margin-top:20px}.btns button.primary{margin-top:0}
 .hidden{display:none!important}
 details{border-bottom:1px solid var(--line);padding:10px 0}
 summary{cursor:pointer;font-weight:600}
@@ -188,14 +190,73 @@ footer{margin-top:56px;color:var(--mute);font-size:14px}
   </div>
 </main>
 
-<footer> Free to use. Built for QA learners. © 2026 Ranjitha Duraiarasu. Scenario 1 and 2  of 9 is live...</footer>
+<main id="checks" class="hidden">
+  <p><a href="#home">Back to all scenarios</a></p>
+  <div class="lab">
+    <section class="panel" aria-labelledby="ct">
+      <h2 id="ct">Learning preferences</h2>
+      <p class="sub">The page under test. Try to break it.</p>
+      <form id="prefForm" novalidate data-testid="pref-form">
+        <fieldset>
+          <legend>Interests</legend>
+          <label class="chk" for="selectAll"><input id="selectAll" type="checkbox" data-testid="select-all"> Select all</label>
+          <label class="chk" for="int-manual"><input class="int" id="int-manual" name="interests" value="Manual testing" type="checkbox" checked data-testid="interest-manual"> Manual testing</label>
+          <label class="chk" for="int-auto"><input class="int" id="int-auto" name="interests" value="Automation" type="checkbox" data-testid="interest-automation"> Automation</label>
+          <label class="chk" for="int-api"><input class="int" id="int-api" name="interests" value="API testing" type="checkbox" data-testid="interest-api"> API testing</label>
+          <label class="chk" for="int-perf"><input class="int" id="int-perf" name="interests" value="Performance" type="checkbox" data-testid="interest-performance"> Performance</label>
+          <label class="chk" for="int-sec"><input class="int" id="int-sec" name="interests" value="Security" type="checkbox" data-testid="interest-security"> Security</label>
+          <label class="chk" for="int-chaos"><input id="int-chaos" type="checkbox" disabled data-testid="interest-chaos"> Chaos engineering (unavailable)</label>
+          <p class="count" id="count" data-testid="selected-count" aria-live="polite">1 of 5 selected</p>
+          <p class="err" id="intErr" data-testid="interests-error" role="alert"></p>
+        </fieldset>
+        <fieldset>
+          <legend>Experience level</legend>
+          <label class="chk" for="lvl-b"><input id="lvl-b" name="level" value="Beginner" type="radio" checked data-testid="level-beginner"> Beginner</label>
+          <label class="chk" for="lvl-i"><input id="lvl-i" name="level" value="Intermediate" type="radio" data-testid="level-intermediate"> Intermediate</label>
+          <label class="chk" for="lvl-p"><input id="lvl-p" name="level" value="Proficient" type="radio" data-testid="level-proficient"> Proficient</label>
+          <label class="chk" for="lvl-x"><input id="lvl-x" name="level" value="Expert" type="radio" disabled data-testid="level-expert"> Expert (unavailable)</label>
+        </fieldset>
+        <fieldset>
+          <legend>Preferred test tool</legend>
+          <label class="chk" for="tool-s"><input id="tool-s" name="tool" value="Selenium" type="radio" data-testid="tool-selenium"> Selenium</label>
+          <label class="chk" for="tool-p"><input id="tool-p" name="tool" value="Playwright" type="radio" data-testid="tool-playwright"> Playwright</label>
+          <label class="chk" for="tool-c"><input id="tool-c" name="tool" value="Cypress" type="radio" data-testid="tool-cypress"> Cypress</label>
+          <p class="err" id="toolErr" data-testid="tool-error" role="alert"></p>
+        </fieldset>
+        <div class="btns">
+          <button class="primary" id="savePref" type="submit" data-testid="save-button">Save preferences</button>
+          <button class="ghost" id="resetPref" type="button" data-testid="reset-button">Reset</button>
+        </div>
+        <div id="prefResult" class="alert success hidden" role="status" data-testid="pref-result"></div>
+      </form>
+    </section>
+    <section class="panel" aria-labelledby="ctt">
+      <h2 id="ctt">Scenario 3: Checkboxes and radio buttons</h2>
+      <p class="sub">Level: Beginner</p>
+      <div class="hint">Skills practiced: check, uncheck, isChecked, isEnabled, radio groups, indeterminate state, default values, disabled elements, form submission.</div>
+      <h3 style="font-size:18px;margin:22px 0 4px">Test cases to write</h3>
+      <details><summary>Default states</summary><p>On page load, only Manual testing is checked. Beginner is the selected level. No tool is selected. Counter reads “1 of 5 selected”.</p></details>
+      <details><summary>Check and uncheck</summary><p>Check Automation, then uncheck it. State and counter update each time.</p></details>
+      <details><summary>Select all</summary><p>Click Select all. All 5 interests are checked and the counter reads “5 of 5 selected”. Click again and all are unchecked.</p></details>
+      <details><summary>Select all, partial state</summary><p>With some interests checked, Select all shows the indeterminate state (the <code>indeterminate</code> property is true). Checking the last one makes it fully checked.</p></details>
+      <details><summary>Disabled elements</summary><p>Chaos engineering and Expert cannot be clicked. Assert <code>disabled</code> and that the state does not change after a click attempt.</p></details>
+      <details><summary>Radio group behaviour</summary><p>Select Intermediate. Beginner becomes unselected. Only one level can be selected at a time.</p></details>
+      <details><summary>Radio cannot be unselected</summary><p>Click a selected radio again. It stays selected. Only Reset or a different choice changes it.</p></details>
+      <details><summary>Label click</summary><p>Click the label text, not the box. The matching input changes state.</p></details>
+      <details><summary>Validation</summary><p>Uncheck all interests and click Save. Expect “Select at least one interest.” Without a tool, expect “Choose a test tool.”</p></details>
+      <details><summary>Save and reset</summary><p>Valid save shows a summary line with your choices. Reset restores every default and hides the summary.</p></details>
+    </section>
+  </div>
+</main>
+
+<footer>Free to use. Built for QA learners. Scenarios 1 to 3 of 9 are live.</footer>
 </div>
 
 <script>
 var SCENARIOS=[
  ["login","Login form","Valid and invalid credentials, empty fields, show/hide password",true],
  ["register","Registration form","Required fields, email format, password rules, duplicate email",true],
- ["","Checkboxes and radio buttons","Select, deselect, default states",false],
+ ["checks","Checkboxes and radio buttons","Select, deselect, default states, select all, disabled options",true],
  ["","Dropdowns","Single, multi-select and dependent dropdowns",false],
  ["","Buttons and links","Click, double-click, right-click, broken links",false],
  ["","Text inputs","Special characters, max length, trimming spaces",false],
@@ -215,11 +276,12 @@ SCENARIOS.forEach(function(s,i){
 
 function route(){
   var h=(location.hash||"#home").slice(1);
-  if(h!=="login"&&h!=="register")h="home";
+  if(["login","register","checks"].indexOf(h)<0)h="home";
   document.getElementById("home").classList.toggle("hidden",h!=="home");
   document.getElementById("login").classList.toggle("hidden",h!=="login");
   document.getElementById("register").classList.toggle("hidden",h!=="register");
-  document.title=(h==="login"?"Login form | ":h==="register"?"Registration form | ":"")+"QA Practice Lab";
+  document.getElementById("checks").classList.toggle("hidden",h!=="checks");
+  document.title=(h==="login"?"Login form | ":h==="register"?"Registration form | ":h==="checks"?"Checkboxes and radio buttons | ":"")+"QA Practice Lab";
   if(h==="login")prefill();
   window.scrollTo(0,0);
 }
@@ -291,6 +353,32 @@ g("regAgain").addEventListener("click",function(){
   g("regForm").classList.remove("hidden");
   g("regForm").reset();showRules("");
   ["rname","remail","rpass","rconf","rterms"].forEach(function(i){setErr(i,"")});
+});
+var ints=[].slice.call(document.querySelectorAll("#checks .int"));
+function sync(){
+  var n=ints.filter(function(x){return x.checked}).length;
+  g("selectAll").checked=n===ints.length;
+  g("selectAll").indeterminate=n>0&&n<ints.length;
+  g("count").textContent=n+" of "+ints.length+" selected";
+}
+ints.forEach(function(x){x.addEventListener("change",sync)});
+g("selectAll").addEventListener("change",function(){var v=this.checked;ints.forEach(function(x){x.checked=v});sync()});
+g("prefForm").addEventListener("submit",function(e){
+  e.preventDefault();
+  var picked=ints.filter(function(x){return x.checked}).map(function(x){return x.value});
+  var tool=document.querySelector('#checks input[name="tool"]:checked');
+  var lvl=document.querySelector('#checks input[name="level"]:checked');
+  g("intErr").textContent=picked.length?"":"Select at least one interest.";
+  g("toolErr").textContent=tool?"":"Choose a test tool.";
+  g("prefResult").className="alert success hidden";
+  if(!picked.length||!tool)return;
+  g("prefResult").textContent="Saved. Interests: "+picked.join(", ")+". Level: "+lvl.value+". Tool: "+tool.value+".";
+  g("prefResult").className="alert success";
+});
+g("resetPref").addEventListener("click",function(){
+  g("prefForm").reset();sync();
+  g("intErr").textContent="";g("toolErr").textContent="";
+  g("prefResult").className="alert success hidden";
 });
 document.getElementById("themeBtn").addEventListener("click",function(){
   var r=document.documentElement,dark=r.getAttribute("data-theme")==="dark"||(!r.getAttribute("data-theme")&&matchMedia("(prefers-color-scheme:dark)").matches);
