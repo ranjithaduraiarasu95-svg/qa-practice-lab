@@ -53,6 +53,9 @@ button.ghost{background:transparent;color:var(--brand);white-space:nowrap}
 .rules{list-style:none;padding:0;margin:10px 0 0;font-size:14px;color:var(--mute)}.rules li::before{content:"○ "}.rules li.met{color:var(--ok)}.rules li.met::before{content:"✓ "}
 fieldset{border:1px solid var(--line);border-radius:8px;margin:16px 0 0;padding:4px 14px 14px}legend{font-weight:600;padding:0 6px}.count{color:var(--mute);font-size:14px;margin:10px 0 0}
 .btns{display:flex;gap:10px;margin-top:20px}.btns button.primary{margin-top:0}
+select,textarea{width:100%;padding:11px 12px;font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:6px}select.bad,textarea.bad{border-color:var(--err)}select:disabled{opacity:.55}
+input[type=number]{width:100%;padding:11px 12px;font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:6px}input[type=number].bad{border-color:var(--err)}
+.stat{margin-top:16px;padding:12px 14px;border:1.5px dashed var(--line);border-radius:6px;font-weight:600}.row2{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}.links{display:grid;gap:8px;margin-top:16px}
 .hidden{display:none!important}
 details{border-bottom:1px solid var(--line);padding:10px 0}
 summary{cursor:pointer;font-weight:600}
@@ -249,7 +252,115 @@ footer{margin-top:56px;color:var(--mute);font-size:14px}
   </div>
 </main>
 
-<footer>Free to use. Built for QA learners. © 2026 Ranjitha Duraiarasu. Scenarios 1 to 3 of 9 are live.</footer>
+<main id="dropdowns" class="hidden">
+  <p><a href="#home">Back to all scenarios</a></p>
+  <div class="lab">
+    <section class="panel" aria-labelledby="dt">
+      <h2 id="dt">Your location and skills</h2>
+      <p class="sub">The page under test. Try to break it.</p>
+      <form id="ddForm" novalidate data-testid="dropdown-form">
+        <label for="ddCountry">Country</label>
+        <select id="ddCountry" name="country" data-testid="country-select"><option value="">Select a country</option><option value="India">India</option><option value="USA">USA</option><option value="UK">UK</option></select>
+        <p class="err" id="ddCountryErr" data-testid="country-error" role="alert"></p>
+        <label for="ddState">State or region (depends on country)</label>
+        <select id="ddState" name="state" disabled data-testid="state-select"><option value="">Select a state</option></select>
+        <p class="err" id="ddStateErr" data-testid="state-error" role="alert"></p>
+        <label for="ddSkills">Skills (hold Ctrl or Cmd to select several)</label>
+        <select id="ddSkills" name="skills" multiple size="4" data-testid="skills-select"><option value="Selenium">Selenium</option><option value="Playwright">Playwright</option><option value="Cypress">Cypress</option><option value="Postman">Postman</option></select>
+        <div class="btns"><button class="primary" type="submit" id="ddSave" data-testid="dd-save">Save</button><button class="ghost" type="button" id="ddReset" data-testid="dd-reset">Reset</button></div>
+        <div id="ddResult" class="alert success hidden" role="status" data-testid="dd-result"></div>
+      </form>
+    </section>
+    <section class="panel" aria-labelledby="dtt">
+      <h2 id="dtt">Scenario 4: Dropdowns</h2>
+      <p class="sub">Level: Beginner</p>
+      <div class="hint">Skills practiced: select by value, text and index, reading selected option, dependent dropdowns, multi-select, disabled elements.</div>
+      <h3 style="font-size:18px;margin:22px 0 4px">Test cases to write</h3>
+      <details><summary>Default state</summary><p>Country shows “Select a country”. State is disabled. Country has 4 options including the placeholder.</p></details>
+      <details><summary>Select three ways</summary><p>Select India by visible text, by value and by index. All give the same result.</p></details>
+      <details><summary>Dependent dropdown</summary><p>Choosing India enables State with Tamil Nadu and Karnataka. USA gives California and Texas. UK gives England and Scotland.</p></details>
+      <details><summary>State resets</summary><p>Pick India, then Tamil Nadu, then change country to USA. State goes back to the placeholder with new options.</p></details>
+      <details><summary>Multi-select</summary><p>Select Selenium and Cypress, then deselect Selenium. Assert the selected options each time.</p></details>
+      <details><summary>Validation and save</summary><p>Save with nothing chosen: “Select a country.” Country without state: “Select a state.” Valid save shows a summary. Reset restores defaults.</p></details>
+    </section>
+  </div>
+</main>
+
+<main id="buttons" class="hidden">
+  <p><a href="#home">Back to all scenarios</a></p>
+  <div class="lab">
+    <section class="panel" aria-labelledby="bt">
+      <h2 id="bt">Buttons and links</h2>
+      <p class="sub">The page under test. Try to break it.</p>
+      <div class="row2">
+        <button class="ghost" type="button" id="clickBtn" data-testid="click-button">Click me</button>
+        <button class="ghost" type="button" id="dblBtn" data-testid="double-click-button">Double-click me</button>
+        <button class="ghost" type="button" id="ctxBtn" data-testid="right-click-button">Right-click me</button>
+      </div>
+      <div class="row2">
+        <button class="ghost" type="button" id="disBtn" disabled data-testid="disabled-button">Disabled button</button>
+        <button class="ghost" type="button" id="enableBtn" data-testid="toggle-disabled">Enable the button</button>
+      </div>
+      <div class="stat" id="btnStatus" role="status" data-testid="button-status">No action yet</div>
+      <div class="links">
+        <a href="#home" id="homeLink" data-testid="link-home">Go to the home page</a>
+        <a href="https://example.com" target="_blank" rel="noopener" id="newTabLink" data-testid="link-new-tab">Open example.com in a new tab</a>
+        <a href="#" id="okLink" data-status="200" data-testid="link-ok">Working link (status 200)</a>
+        <a href="#" id="brokenLink" data-status="404" data-testid="link-broken">Broken link (status 404)</a>
+      </div>
+    </section>
+    <section class="panel" aria-labelledby="btt">
+      <h2 id="btt">Scenario 5: Buttons and links</h2>
+      <p class="sub">Level: Beginner</p>
+      <div class="hint">Skills practiced: click, double-click, right-click, enabled and disabled checks, new tab handling, link href and target attributes.</div>
+      <h3 style="font-size:18px;margin:22px 0 4px">Test cases to write</h3>
+      <details><summary>Single click</summary><p>Click three times. The status reads “Clicks: 3”.</p></details>
+      <details><summary>Double-click</summary><p>Double-click the button. Status reads “Double click detected”. A single click does not trigger it.</p></details>
+      <details><summary>Right-click</summary><p>Right-click the button. Status reads “Right click detected” and no browser menu appears.</p></details>
+      <details><summary>Disabled button</summary><p>It starts disabled. Click the toggle, then it becomes enabled and clicking it shows “Enabled button clicked”.</p></details>
+      <details><summary>Link navigation</summary><p>The home link goes to the home page, and the browser back button returns. Assert URL and page title.</p></details>
+      <details><summary>New tab and broken link</summary><p>The example.com link opens a new tab (check <code>target</code>). The 404 link shows “Page not found”, the 200 link shows “OK”.</p></details>
+    </section>
+  </div>
+</main>
+
+<main id="inputs" class="hidden">
+  <p><a href="#home">Back to all scenarios</a></p>
+  <div class="lab">
+    <section class="panel" aria-labelledby="it">
+      <h2 id="it">Profile details</h2>
+      <p class="sub">The page under test. Try to break it.</p>
+      <form id="tiForm" novalidate data-testid="inputs-form">
+        <label for="tiUser">Username (max 15 characters)</label>
+        <input id="tiUser" name="username" type="text" maxlength="15" autocomplete="off" data-testid="username-input">
+        <p class="count" id="userCount" data-testid="username-count">0/15</p>
+        <p class="err" id="tiUserErr" data-testid="username-error" role="alert"></p>
+        <label for="tiAge">Age (18 to 99)</label>
+        <input id="tiAge" name="age" type="number" data-testid="age-input">
+        <p class="err" id="tiAgeErr" data-testid="age-error" role="alert"></p>
+        <label for="tiBio">Bio (max 100 characters)</label>
+        <textarea id="tiBio" name="bio" rows="3" maxlength="100" data-testid="bio-input"></textarea>
+        <p class="count" id="bioCount" data-testid="bio-count">0/100</p>
+        <div class="btns"><button class="primary" type="submit" id="tiSave" data-testid="inputs-save">Save</button><button class="ghost" type="button" id="tiClear" data-testid="inputs-clear">Clear</button></div>
+        <div id="tiResult" class="alert success hidden" role="status" data-testid="inputs-result"></div>
+      </form>
+    </section>
+    <section class="panel" aria-labelledby="itt">
+      <h2 id="itt">Scenario 6: Text inputs</h2>
+      <p class="sub">Level: Beginner</p>
+      <div class="hint">Skills practiced: typing, clearing, reading input values, max length, boundary values, special characters, trimming, number fields.</div>
+      <h3 style="font-size:18px;margin:22px 0 4px">Test cases to write</h3>
+      <details><summary>Max length</summary><p>Type 20 characters in Username. Only 15 are accepted and the counter reads 15/15.</p></details>
+      <details><summary>Trimming spaces</summary><p>Enter <code>  anna  </code>. The saved summary shows <code>[anna] (length 4)</code>.</p></details>
+      <details><summary>Special characters</summary><p>Try <code>&lt;b&gt;x&lt;/b&gt;</code>, <code>' OR 1=1</code> and emoji. They are shown as plain text and never run as code.</p></details>
+      <details><summary>Age boundaries</summary><p>17 and 100 fail. 18 and 99 pass. Also try empty, 25.5 and negative numbers.</p></details>
+      <details><summary>Required username</summary><p>Spaces only or empty gives “Username is required.”</p></details>
+      <details><summary>Clear</summary><p>Fill everything, click Clear. All fields, counters, errors and the summary are reset.</p></details>
+    </section>
+  </div>
+</main>
+
+<footer>Free to use. Built for QA learners. Scenarios 1 to 6 of 9 are live.</footer>
 </div>
 
 <script>
@@ -257,9 +368,9 @@ var SCENARIOS=[
  ["login","Login form","Valid and invalid credentials, empty fields, show/hide password",true],
  ["register","Registration form","Required fields, email format, password rules, duplicate email",true],
  ["checks","Checkboxes and radio buttons","Select, deselect, default states, select all, disabled options",true],
- ["","Dropdowns","Single, multi-select and dependent dropdowns",false],
- ["","Buttons and links","Click, double-click, right-click, broken links",false],
- ["","Text inputs","Special characters, max length, trimming spaces",false],
+ ["dropdowns","Dropdowns","Single, multi-select and dependent dropdowns",true],
+ ["buttons","Buttons and links","Click, double-click, right-click, disabled buttons, broken links",true],
+ ["inputs","Text inputs","Special characters, max length, trimming spaces, number field",true],
  ["","Alerts and popups","Accept, dismiss, prompt input",false],
  ["","Static tables","Read rows, count rows, verify cell values",false],
  ["","Page navigation","Back and forward, new tab, page title and URL",false]
@@ -276,12 +387,12 @@ SCENARIOS.forEach(function(s,i){
 
 function route(){
   var h=(location.hash||"#home").slice(1);
-  if(["login","register","checks"].indexOf(h)<0)h="home";
+  if(["login","register","checks","dropdowns","buttons","inputs"].indexOf(h)<0)h="home";
   document.getElementById("home").classList.toggle("hidden",h!=="home");
   document.getElementById("login").classList.toggle("hidden",h!=="login");
   document.getElementById("register").classList.toggle("hidden",h!=="register");
-  document.getElementById("checks").classList.toggle("hidden",h!=="checks");
-  document.title=(h==="login"?"Login form | ":h==="register"?"Registration form | ":h==="checks"?"Checkboxes and radio buttons | ":"")+"QA Practice Lab";
+  ["checks","dropdowns","buttons","inputs"].forEach(function(k){document.getElementById(k).classList.toggle("hidden",h!==k)});
+  document.title=(h==="login"?"Login form | ":h==="register"?"Registration form | ":h==="checks"?"Checkboxes and radio buttons | ":h==="dropdowns"?"Dropdowns | ":h==="buttons"?"Buttons and links | ":h==="inputs"?"Text inputs | ":"")+"QA Practice Lab";
   if(h==="login")prefill();
   window.scrollTo(0,0);
 }
@@ -379,6 +490,52 @@ g("resetPref").addEventListener("click",function(){
   g("prefForm").reset();sync();
   g("intErr").textContent="";g("toolErr").textContent="";
   g("prefResult").className="alert success hidden";
+});
+var GEO={India:["Tamil Nadu","Karnataka"],USA:["California","Texas"],UK:["England","Scotland"]};
+g("ddCountry").addEventListener("change",function(){
+  var s=g("ddState"),l=GEO[this.value]||[];
+  s.innerHTML='<option value="">Select a state</option>';
+  l.forEach(function(x){var o=document.createElement("option");o.value=o.textContent=x;s.appendChild(o)});
+  s.disabled=!l.length;
+});
+g("ddForm").addEventListener("submit",function(e){
+  e.preventDefault();
+  var c=g("ddCountry").value,s=g("ddState").value;
+  var sk=[].slice.call(g("ddSkills").selectedOptions).map(function(o){return o.value});
+  setErr("ddCountry",c?"":"Select a country.");
+  setErr("ddState",c&&!s?"Select a state.":"");
+  g("ddResult").className="alert success hidden";
+  if(!c||!s)return;
+  g("ddResult").textContent="Saved. Country: "+c+". State: "+s+". Skills: "+(sk.length?sk.join(", "):"none")+".";
+  g("ddResult").className="alert success";
+});
+g("ddReset").addEventListener("click",function(){
+  g("ddForm").reset();g("ddCountry").dispatchEvent(new Event("change"));
+  setErr("ddCountry","");setErr("ddState","");g("ddResult").className="alert success hidden";
+});
+var clicks=0;
+function st(t){g("btnStatus").textContent=t}
+g("clickBtn").addEventListener("click",function(){clicks++;st("Clicks: "+clicks)});
+g("dblBtn").addEventListener("dblclick",function(){st("Double click detected")});
+g("ctxBtn").addEventListener("contextmenu",function(e){e.preventDefault();st("Right click detected")});
+g("disBtn").addEventListener("click",function(){st("Enabled button clicked")});
+g("enableBtn").addEventListener("click",function(){var d=g("disBtn");d.disabled=!d.disabled;this.textContent=d.disabled?"Enable the button":"Disable the button"});
+[].forEach.call(document.querySelectorAll("#buttons a[data-status]"),function(a){a.addEventListener("click",function(e){e.preventDefault();var c=a.getAttribute("data-status");st("Link returned status "+c+": "+(c==="200"?"OK":"Page not found"))})});
+function cnt(i,c,m){g(i).addEventListener("input",function(){g(c).textContent=this.value.length+"/"+m})}
+cnt("tiUser","userCount",15);cnt("tiBio","bioCount",100);
+g("tiForm").addEventListener("submit",function(e){
+  e.preventDefault();
+  var u=g("tiUser").value.trim(),a=g("tiAge").value,b=g("tiBio").value,n=Number(a);
+  setErr("tiUser",u?"":"Username is required.");
+  setErr("tiAge",a===""?"Age is required.":(!(n>=18&&n<=99)||n%1?"Age must be a whole number from 18 to 99.":""));
+  g("tiResult").className="alert success hidden";
+  if(!u||a===""||g("tiAgeErr").textContent)return;
+  g("tiResult").textContent="Saved. Username: ["+u+"] (length "+u.length+"). Age: "+n+". Bio length: "+b.length+".";
+  g("tiResult").className="alert success";
+});
+g("tiClear").addEventListener("click",function(){
+  g("tiForm").reset();setErr("tiUser","");setErr("tiAge","");
+  g("userCount").textContent="0/15";g("bioCount").textContent="0/100";g("tiResult").className="alert success hidden";
 });
 document.getElementById("themeBtn").addEventListener("click",function(){
   var r=document.documentElement,dark=r.getAttribute("data-theme")==="dark"||(!r.getAttribute("data-theme")&&matchMedia("(prefers-color-scheme:dark)").matches);
