@@ -56,6 +56,7 @@ fieldset{border:1px solid var(--line);border-radius:8px;margin:16px 0 0;padding:
 select,textarea{width:100%;padding:11px 12px;font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:6px}select.bad,textarea.bad{border-color:var(--err)}select:disabled{opacity:.55}
 input[type=number]{width:100%;padding:11px 12px;font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:6px}input[type=number].bad{border-color:var(--err)}
 .stat{margin-top:16px;padding:12px 14px;border:1.5px dashed var(--line);border-radius:6px;font-weight:600}.row2{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}.links{display:grid;gap:8px;margin-top:16px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50}.modal .box{background:var(--card);padding:24px;border-radius:10px;max-width:380px;width:100%}
 .hidden{display:none!important}
 details{border-bottom:1px solid var(--line);padding:10px 0}
 summary{cursor:pointer;font-weight:600}
@@ -82,7 +83,7 @@ footer{margin-top:56px;color:var(--mute);font-size:14px}
     <p>Free scenarios for Selenium, Playwright and Cypress. Every element has a stable locator, and every page lists the test cases worth writing.</p>
   </section>
   <section class="level" aria-labelledby="b">
-    <h2 id="b">Beginner <small>9 scenarios, adding one at a time</small></h2>
+    <h2 id="b">Beginner <small>9 scenarios, all live</small></h2>
     <div class="list" id="list"></div>
   </section>
   <section class="level">
@@ -360,7 +361,119 @@ footer{margin-top:56px;color:var(--mute);font-size:14px}
   </div>
 </main>
 
-<footer>Free to use. Built for QA learners. © 2026 Ranjitha Duraiarasu. Scenarios 1 to 6 of 9 are live.</footer>
+<main id="alerts" class="hidden">
+  <p><a href="#home">Back to all scenarios</a></p>
+  <div class="lab">
+    <section class="panel" aria-labelledby="at">
+      <h2 id="at">Alerts and popups</h2>
+      <p class="sub">The page under test. Try to break it.</p>
+      <div class="row2">
+        <button class="ghost" type="button" id="alertBtn" data-testid="alert-button">Show alert</button>
+        <button class="ghost" type="button" id="confirmBtn" data-testid="confirm-button">Show confirm</button>
+        <button class="ghost" type="button" id="promptBtn" data-testid="prompt-button">Show prompt</button>
+        <button class="ghost" type="button" id="modalBtn" data-testid="modal-button">Open custom modal</button>
+      </div>
+      <div class="stat" id="alertResult" role="status" data-testid="alert-result">No popup shown yet</div>
+      <div class="hint">The first three use real browser dialogs. Automation tools handle them through dialog events, not through the page elements.</div>
+    </section>
+    <section class="panel" aria-labelledby="att">
+      <h2 id="att">Scenario 7: Alerts and popups</h2>
+      <p class="sub">Level: Beginner</p>
+      <div class="hint">Skills practiced: accept, dismiss, reading dialog text, typing into a prompt, custom modal handling, Escape key.</div>
+      <h3 style="font-size:18px;margin:22px 0 4px">Test cases to write</h3>
+      <details><summary>Simple alert</summary><p>Click Show alert. Assert the dialog text “This is a simple alert.”, accept it, then check the result text.</p></details>
+      <details><summary>Confirm: accept</summary><p>Accept the dialog. Result reads “You pressed OK”.</p></details>
+      <details><summary>Confirm: dismiss</summary><p>Dismiss the dialog. Result reads “You pressed Cancel”.</p></details>
+      <details><summary>Prompt</summary><p>Accept with the text <code>Anna</code> and expect “Hello, Anna!”. Dismiss it and expect “Prompt cancelled”. Accept an empty value and expect “You entered nothing”.</p></details>
+      <details><summary>Custom modal</summary><p>Open it, and it is a normal page element. Confirm shows “Modal confirmed”, Close shows “Modal closed”.</p></details>
+      <details><summary>Escape key</summary><p>Open the modal and press Escape. It closes and the result reads “Modal closed”.</p></details>
+    </section>
+  </div>
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="mt" data-testid="modal">
+    <div class="box"><h3 id="mt">Delete this item?</h3><p class="sub">This is a custom modal, not a browser dialog.</p>
+      <div class="btns"><button class="primary" type="button" id="modalOk" data-testid="modal-confirm">Confirm</button><button class="ghost" type="button" id="modalClose" data-testid="modal-close">Close</button></div></div>
+  </div>
+</main>
+
+<main id="tables" class="hidden">
+  <p><a href="#home">Back to all scenarios</a></p>
+  <div class="lab">
+    <section class="panel" aria-labelledby="tbt">
+      <h2 id="tbt">Employee directory</h2>
+      <p class="sub">The page under test. Static data that never changes.</p>
+      <div class="scroll"><table id="empTable" data-testid="employee-table">
+        <thead><tr><th>ID</th><th>Name</th><th>Role</th><th>City</th><th>Salary</th></tr></thead>
+        <tbody>
+          <tr id="row-1"><td>1</td><td>Anna Roy</td><td>QA Engineer</td><td>Chennai</td><td>55000</td></tr>
+          <tr id="row-2"><td>2</td><td>Bala Kumar</td><td>Developer</td><td>Bengaluru</td><td>72000</td></tr>
+          <tr id="row-3"><td>3</td><td>Chitra Devi</td><td>Designer</td><td>Mumbai</td><td>61000</td></tr>
+          <tr id="row-4"><td>4</td><td>David Paul</td><td>QA Lead</td><td>Chennai</td><td>88000</td></tr>
+          <tr id="row-5"><td>5</td><td>Esha Singh</td><td>Developer</td><td>Pune</td><td>69000</td></tr>
+          <tr id="row-6"><td>6</td><td>Farid Khan</td><td>Product Manager</td><td>Delhi</td><td>95000</td></tr>
+          <tr id="row-7"><td>7</td><td>Gita Rao</td><td>QA Engineer</td><td>Hyderabad</td><td>57000</td></tr>
+          <tr id="row-8"><td>8</td><td>Hari Nair</td><td>DevOps Engineer</td><td>Kochi</td><td>78000</td></tr>
+        </tbody></table></div>
+      <p class="count" data-testid="table-summary">Total rows: 8. Total salary: 575000.</p>
+    </section>
+    <section class="panel" aria-labelledby="tbtt">
+      <h2 id="tbtt">Scenario 8: Static tables</h2>
+      <p class="sub">Level: Beginner</p>
+      <div class="hint">Skills practiced: table locators (tr, td, nth-child), counting rows, reading cell text, finding a row by text, looping and calculating.</div>
+      <h3 style="font-size:18px;margin:22px 0 4px">Test cases to write</h3>
+      <details><summary>Headers</summary><p>Assert the 5 headers are ID, Name, Role, City, Salary, in that order.</p></details>
+      <details><summary>Row count</summary><p>The body has 8 rows. The summary line also says 8.</p></details>
+      <details><summary>Cell value</summary><p>Row 4, column Name is <code>David Paul</code>. Row 6 salary is <code>95000</code>.</p></details>
+      <details><summary>Find row by text</summary><p>Find the row containing Gita Rao and assert her city is Hyderabad.</p></details>
+      <details><summary>Count by condition</summary><p>QA Engineers: 2 rows. Rows with city Chennai: 2.</p></details>
+      <details><summary>Total salary</summary><p>Read every salary cell, add them up, and compare with the 575000 shown in the summary.</p></details>
+    </section>
+  </div>
+</main>
+
+<main id="navigation" class="hidden">
+  <p><a href="#home">Back to all scenarios</a></p>
+  <div class="lab">
+    <section class="panel" aria-labelledby="nt">
+      <h2 id="nt">Navigation practice</h2>
+      <p class="sub">The page under test. Move between pages and check the URL and title.</p>
+      <div class="links">
+        <a href="#nav-about" id="aboutLink" data-testid="nav-about-link">Go to the About page</a>
+        <a href="#nav-contact" id="contactLink" data-testid="nav-contact-link">Go to the Contact page</a>
+        <a href="#nav-about" target="_blank" rel="noopener" id="aboutTab" data-testid="nav-about-newtab">Open the About page in a new tab</a>
+      </div>
+      <div class="row2">
+        <button class="ghost" type="button" id="backBtn" data-testid="back-button">Go back</button>
+        <button class="ghost" type="button" id="fwdBtn" data-testid="forward-button">Go forward</button>
+        <button class="ghost" type="button" id="infoBtn" data-testid="info-button">Show page info</button>
+      </div>
+      <div class="stat" id="navInfo" role="status" data-testid="nav-info">Click “Show page info”</div>
+    </section>
+    <section class="panel" aria-labelledby="ntt">
+      <h2 id="ntt">Scenario 9: Page navigation</h2>
+      <p class="sub">Level: Beginner</p>
+      <div class="hint">Skills practiced: URL assertions, page title assertions, browser back, forward and reload, new tab and window handling.</div>
+      <h3 style="font-size:18px;margin:22px 0 4px">Test cases to write</h3>
+      <details><summary>Title and URL</summary><p>Each page has its own title: Navigation practice, About page, Contact page. The URL ends with <code>#navigation</code>, <code>#nav-about</code> or <code>#nav-contact</code>.</p></details>
+      <details><summary>Link navigation</summary><p>Click the About link. Assert the About heading, the URL and the title.</p></details>
+      <details><summary>Back and forward</summary><p>Go Navigation to About to Contact. Go back twice, then forward once. Assert the page after every step.</p></details>
+      <details><summary>Reload</summary><p>Reload on the About page. You stay on the About page.</p></details>
+      <details><summary>New tab</summary><p>The new tab link opens a second tab on the About page. The first tab stays where it was.</p></details>
+      <details><summary>Unknown URL</summary><p>Change the hash to <code>#nothing</code>. The site shows the home page.</p></details>
+    </section>
+  </div>
+</main>
+
+<main id="nav-about" class="hidden">
+  <p><a href="#navigation" data-testid="about-back">Back to Navigation practice</a></p>
+  <section class="panel"><h1 style="font-size:32px" data-testid="about-heading">About page</h1><p class="sub">You are on the About page. <a href="#nav-contact">Go to Contact</a></p></section>
+</main>
+
+<main id="nav-contact" class="hidden">
+  <p><a href="#navigation" data-testid="contact-back">Back to Navigation practice</a></p>
+  <section class="panel"><h1 style="font-size:32px" data-testid="contact-heading">Contact page</h1><p class="sub">You are on the Contact page. <a href="#nav-about">Go to About</a></p></section>
+</main>
+
+<footer>Free to use. Built for QA learners. All 9 beginner scenarios are live.</footer>
 </div>
 
 <script>
@@ -371,9 +484,9 @@ var SCENARIOS=[
  ["dropdowns","Dropdowns","Single, multi-select and dependent dropdowns",true],
  ["buttons","Buttons and links","Click, double-click, right-click, disabled buttons, broken links",true],
  ["inputs","Text inputs","Special characters, max length, trimming spaces, number field",true],
- ["","Alerts and popups","Accept, dismiss, prompt input",false],
- ["","Static tables","Read rows, count rows, verify cell values",false],
- ["","Page navigation","Back and forward, new tab, page title and URL",false]
+ ["alerts","Alerts and popups","Alert, confirm, prompt and a custom modal",true],
+ ["tables","Static tables","Read rows, count rows, verify cell values, calculate totals",true],
+ ["navigation","Page navigation","Back and forward, new tab, page title and URL",true]
 ];
 var list=document.getElementById("list");
 SCENARIOS.forEach(function(s,i){
@@ -387,12 +500,12 @@ SCENARIOS.forEach(function(s,i){
 
 function route(){
   var h=(location.hash||"#home").slice(1);
-  if(["login","register","checks","dropdowns","buttons","inputs"].indexOf(h)<0)h="home";
+  if(["login","register","checks","dropdowns","buttons","inputs","alerts","tables","navigation","nav-about","nav-contact"].indexOf(h)<0)h="home";
   document.getElementById("home").classList.toggle("hidden",h!=="home");
   document.getElementById("login").classList.toggle("hidden",h!=="login");
   document.getElementById("register").classList.toggle("hidden",h!=="register");
-  ["checks","dropdowns","buttons","inputs"].forEach(function(k){document.getElementById(k).classList.toggle("hidden",h!==k)});
-  document.title=(h==="login"?"Login form | ":h==="register"?"Registration form | ":h==="checks"?"Checkboxes and radio buttons | ":h==="dropdowns"?"Dropdowns | ":h==="buttons"?"Buttons and links | ":h==="inputs"?"Text inputs | ":"")+"QA Practice Lab";
+  ["checks","dropdowns","buttons","inputs","alerts","tables","navigation","nav-about","nav-contact"].forEach(function(k){document.getElementById(k).classList.toggle("hidden",h!==k)});
+  document.title=(h==="login"?"Login form | ":h==="register"?"Registration form | ":h==="checks"?"Checkboxes and radio buttons | ":h==="dropdowns"?"Dropdowns | ":h==="buttons"?"Buttons and links | ":h==="inputs"?"Text inputs | ":h==="alerts"?"Alerts and popups | ":h==="tables"?"Static tables | ":h==="navigation"?"Navigation practice | ":h==="nav-about"?"About page | ":h==="nav-contact"?"Contact page | ":"")+"QA Practice Lab";
   if(h==="login")prefill();
   window.scrollTo(0,0);
 }
@@ -537,6 +650,21 @@ g("tiClear").addEventListener("click",function(){
   g("tiForm").reset();setErr("tiUser","");setErr("tiAge","");
   g("userCount").textContent="0/15";g("bioCount").textContent="0/100";g("tiResult").className="alert success hidden";
 });
+function ar(t){g("alertResult").textContent=t}
+g("alertBtn").addEventListener("click",function(){alert("This is a simple alert.");ar("Alert was shown and closed")});
+g("confirmBtn").addEventListener("click",function(){ar(confirm("Do you want to delete this item?")?"You pressed OK":"You pressed Cancel")});
+g("promptBtn").addEventListener("click",function(){
+  var n=prompt("Enter your name:","Guest");
+  ar(n===null?"Prompt cancelled":(n.trim()===""?"You entered nothing":"Hello, "+n+"!"));
+});
+function closeModal(t){g("modal").classList.add("hidden");ar(t)}
+g("modalBtn").addEventListener("click",function(){g("modal").classList.remove("hidden");g("modalOk").focus()});
+g("modalOk").addEventListener("click",function(){closeModal("Modal confirmed")});
+g("modalClose").addEventListener("click",function(){closeModal("Modal closed")});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!g("modal").classList.contains("hidden"))closeModal("Modal closed")});
+g("backBtn").addEventListener("click",function(){history.back()});
+g("fwdBtn").addEventListener("click",function(){history.forward()});
+g("infoBtn").addEventListener("click",function(){g("navInfo").textContent="Title: "+document.title+" | URL: "+location.href});
 document.getElementById("themeBtn").addEventListener("click",function(){
   var r=document.documentElement,dark=r.getAttribute("data-theme")==="dark"||(!r.getAttribute("data-theme")&&matchMedia("(prefers-color-scheme:dark)").matches);
   r.setAttribute("data-theme",dark?"light":"dark");
